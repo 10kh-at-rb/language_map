@@ -19,7 +19,7 @@ describe LatlongPopulator do
     end
 
     it "doesn't throw an error if Geocoder returns empty array" do
-      expect(Geocoder).to receive(:search).with("New York").and_return([GeocoderResponse.new])
+      expect(Geocoder).to receive(:search).with("New York").and_return([])
       expect{LatlongPopulator.new.run}.not_to raise_error
     end
   end
