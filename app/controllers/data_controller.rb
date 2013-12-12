@@ -7,4 +7,12 @@ class DataController < ApplicationController
     flash[:notice] = "File uploaded"
     redirect_to data_path
   end
+
+  def map
+  end
+
+  def map_json
+    data = File.read('vendor/json/world-50m.json')
+    render json: data
+  end
 end

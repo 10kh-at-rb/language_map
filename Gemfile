@@ -7,6 +7,10 @@ gem 'uglifier', '>= 1.3.0'
 gem 'jquery-rails'
 gem 'geocoder'
 
+group :development do
+  gem 'awesome_print'
+end
+
 group :development, :test do
   gem 'rspec-rails'
 end

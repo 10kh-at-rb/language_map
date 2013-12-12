@@ -12,4 +12,6 @@
 //
 //= require jquery
 //= require jquery_ujs
+//= require d3.v3.min
+//= require d3.geo.projection.v0.min
 //= require_tree .

@@ -1,0 +1,121 @@
+<style>
+ 
+body {
+  background: #fcfcfa;
+}
+
+.stroke {
+  fill: none;
+  stroke: #000;
+  stroke-width: 3px;
+}
+
+.fill {
+  fill: #fff;
+}
+
+.graticule {
+  fill: none;
+  stroke: #777;
+  stroke-width: .5px;
+  stroke-opacity: .5;
+}
+
+.land {
+  fill: #222;
+}
+
+.boundary {
+  fill: none;
+  stroke: #fff;
+  stroke-width: .5px;
+}
+
+.point {
+  fill: red;
+}
+
+</style>
+<script src="http://d3js.org/topojson.v1.min.js"></script>
+<script>
+ 
+var width = 1500,
+    height = 600;
+
+var projection = d3.geo.robinson()
+    .scale(150)
+    .translate([width / 2, height / 2])
+    .precision(.1);
+ 
+var path = d3.geo.path()
+    .projection(projection);
+
+var graticule = d3.geo.graticule();
+
+var svg = d3.select("body").append("svg")
+    .attr("width", width)
+    .attr("height", height);
+
+svg.append("defs").append("path")
+    .datum({type: "Sphere"})
+    .attr("id", "sphere")
+    .attr("d", path);
+
+svg.append("use")
+    .attr("class", "stroke")
+    .attr("xlink:href", "#sphere");
+
+svg.append("use")
+    .attr("class", "fill")
+    .attr("xlink:href", "#sphere");
+
+svg.append("path")
+    .datum(graticule)
+    .attr("class", "graticule")
+    .attr("d", path);
+
+d3.json("data/map_json.json", function(error, world) {
+  svg.insert("path", ".graticule")
+      .datum(topojson.feature(world, world.objects.land))
+      .attr("class", "land")
+      .attr("d", path);
+
+  svg.insert("path", ".graticule")
+      .datum(topojson.mesh(world, world.objects.countries, function(a, b) { return a !== b; }))
+      .attr("class", "boundary")
+      .attr("d", path);
+});
+
+d3.json("repositories.json", function(error, data) {
+  svg.selectAll("circle")
+      .data(data)
+      .enter()
+      .append("circle")
+      .attr("cx", function(d) {
+        return projection([d.longitude, d.latitude])[0];
+       })
+      .attr("cy", function(d) {
+        return projection([d.longitude, d.latitude])[1];
+       })
+       .attr("r", 3)
+       .style("fill", function(d){
+        return color[d.language];
+       })
+      .style("opacity", 0.75);
+});
+
+var color = {
+  "Ruby"       : "red",
+  "JavaScript" : "green",
+  "Python"     : "blue",
+  "Java"       : "yellow",
+  "CSS"        : "purple",
+  "C++"        : "orange",
+  "PHP"        : "brown",
+  "Shell"      : "indigo",
+  "C"          : "pink"
+}
+
+d3.select(self.frameElement).style("height", height + "px");
+
+</script>
