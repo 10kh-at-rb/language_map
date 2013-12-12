@@ -4,15 +4,21 @@ describe CsvImporter do
   describe '.import' do
     describe "clean data" do
       let(:csv) { mock_csv(
-        "https://github.com/user0/repo0,Ruby,Washington, DC\n"\
-        "https://github.com/user1/repo1,JavaScript,San Francisco\n"\
-        "https://github.com/user2/repo2,C++,Horncastle, Lincolnshire, UK\n"\
-        "https://github.com/user3/repo3,Objective-C,Moscow, Russia\n"
+        "1a2b3c4d5e,https://github.com/user0/repo0,Ruby,Washington, DC\n"\
+        "6f7g8h9i0j,https://github.com/user1/repo1,JavaScript,San Francisco\n"\
+        "5k4l3m2n1o,https://github.com/user2/repo2,C++,Horncastle, Lincolnshire, UK\n"\
+        "0p9q8r7s6t,https://github.com/user3/repo3,Objective-C,Moscow, Russia\n"
       ) }
 
       it "imports csv and creates a Repository record for each row" do
         CsvImporter.import(csv)
         expect(Repository.count).to be(4)
+      end
+
+      it "sets the correct sha attribute" do
+        CsvImporter.import(csv)
+        urls = %w[1a2b3c4d5e 6f7g8h9i0j 5k4l3m2n1o 0p9q8r7s6t].sort
+        expect(Repository.all.map(&:sha).sort).to eq(urls)
       end
 
       it "sets the correct url attribute" do

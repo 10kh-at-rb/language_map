@@ -1,4 +1,5 @@
 class Repository < ActiveRecord::Base
+  validates :sha, presence: true, uniqueness: true
   validates :url, presence: true
   validates :language, presence: true
   validates :location, presence: true

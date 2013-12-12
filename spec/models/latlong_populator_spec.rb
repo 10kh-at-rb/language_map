@@ -4,6 +4,7 @@ describe LatlongPopulator do
   describe "#run" do
     let!(:repo_with_latlong)    { FactoryGirl.create(:repository, latitude: 38.9072309, longitude: -77.0364641) }
     let!(:repo_without_latlong) { FactoryGirl.create(:repository, location: "New York") }
+    let(:geocoder_response)     { stub(data: { "geometry" => { "location" => { "lat" => 12.345, "lng" => 67.89 } } }) }
 
     it "only runs for repositories with nil latitude and longitude" do
       Geocoder.expects(:search).with("New York").returns([geocoder_response])
@@ -25,6 +26,6 @@ describe LatlongPopulator do
   end
 end
 
-def geocoder_response
-  stub(data: { "geometry" => { "location" => { "lat" => 12.345, "lng" => 67.89 } } })
-end
+# def geocoder_response
+#   stub(data: { "geometry" => { "location" => { "lat" => 12.345, "lng" => 67.89 } } })
+# end
