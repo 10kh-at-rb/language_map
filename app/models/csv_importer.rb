@@ -1,13 +1,8 @@
 require 'csv'
 
 class CsvImporter
-  attr_reader :csv
 
-  def initialize(csv)
-    @csv = csv
-  end
-
-  def import
+  def self.import(csv)
     CSV.parse(File.read(csv)) do |row|
       r = Repository.new
       r.url = row[0] unless row[0] == "null"

@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe CsvImporter do
-  describe '#import' do
+  describe '.import' do
     describe "clean data" do
       let(:csv) { mock_csv(
         "https://github.com/user0/repo0,Ruby,Washington, DC\n"\
@@ -11,24 +11,24 @@ describe CsvImporter do
       ) }
 
       it "imports csv and creates a Repository record for each row" do
-        CsvImporter.new(csv).import
+        CsvImporter.import(csv)
         expect(Repository.count).to be(4)
       end
 
       it "sets the correct url attribute" do
-        CsvImporter.new(csv).import
+        CsvImporter.import(csv)
         urls = [0,1,2,3].map { |n| "https://github.com/user#{n}/repo#{n}" }
         expect(Repository.all.map(&:url)).to eq(urls)
       end
 
       it "sets the correct language attribute when language is present" do
-        CsvImporter.new(csv).import
+        CsvImporter.import(csv)
         languages = ["Ruby", "JavaScript", "C++", "Objective-C"]
         expect(Repository.all.map(&:language)).to eq(languages)
       end
 
       it "sets full location regardless of presence of commas" do
-        CsvImporter.new(csv).import
+        CsvImporter.import(csv)
         locations = ["Washington, DC", "San Francisco", "Horncastle, Lincolnshire, UK", "Moscow, Russia"]
         expect(Repository.all.map(&:location)).to eq(locations)
       end
@@ -38,7 +38,7 @@ describe CsvImporter do
       let(:csv) { mock_csv("null,Ruby,Washington, DC\n") }
 
       it "does not create a new record" do
-        expect{CsvImporter.new(csv).import}.not_to change{Repository.count}
+        expect{CsvImporter.import(csv)}.not_to change{Repository.count}
       end
     end
 
@@ -46,7 +46,7 @@ describe CsvImporter do
       let(:csv) { mock_csv("https://github.com/user0/repo0,null,Washington, DC\n") }
 
       it "does not create a new record" do
-        expect{CsvImporter.new(csv).import}.not_to change{Repository.count}
+        expect{CsvImporter.import(csv)}.not_to change{Repository.count}
       end
     end
 
@@ -54,7 +54,7 @@ describe CsvImporter do
       let(:csv) { mock_csv("https://github.com/user0/repo0,Ruby,null\n") }
 
       it "does not create a new record" do
-        expect{CsvImporter.new(csv).import}.not_to change{Repository.count}
+        expect{CsvImporter.import(csv)}.not_to change{Repository.count}
       end
     end
   end
