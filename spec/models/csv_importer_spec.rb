@@ -63,5 +63,5 @@ end
 private
 
 def mock_csv(csv_string)
-  expect(File).to receive(:read).and_return(StringIO.new(csv_string))
+  File.expects(:read).returns(StringIO.new(csv_string))
 end
