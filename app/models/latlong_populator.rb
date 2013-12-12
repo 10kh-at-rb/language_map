@@ -2,7 +2,8 @@ class LatlongPopulator
   def run
     repositories.each do |repo|
       puts "Finding #{repo.location}...\n"
-      resp = Geocoder.search(repo.location).first
+      location = force_encoding_for(repo.location)
+      resp = Geocoder.search(location).first
       update_repo(repo, resp) if resp
     end
   end
@@ -17,5 +18,13 @@ class LatlongPopulator
     latlong = resp.data["geometry"]["location"]
     lat, lng = latlong["lat"], latlong["lng"]
     repo.update_attributes latitude: lat, longitude: lng
+  end
+
+  def force_encoding_for(location)
+    location.force_encoding("binary").encode("UTF-8",
+                                             invalid: :replace,
+                                             undef:   :replace,
+                                             replace: ""
+                                            )
   end
 end
