@@ -16,3 +16,7 @@ AND actor_attributes_location IS NOT NULL
 AND PARSE_UTC_USEC(created_at) >= PARSE_UTC_USEC('2013-11-01 00:00:00')
 LIMIT 1000;
 ```
+
+To seed data, run this query and export to CSV, and upload the CSV at http://localhost:3000/data.
+
+To populate latitude/longitude, run `rake latlong:populate`. I haven't figured out how the Geocoder/Google rate limiting works but you'll probably need to run the rake task a few times before all of the records with findable location names are populated.
