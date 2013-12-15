@@ -12,7 +12,7 @@ $ ->
 
   φ = d3.scale.linear().domain([0, height]).range([90, -90]);
 
-  svg = d3.select("body").append("svg").attr("width", width).attr("height", height)
+  svg = d3.select("#map").append("svg").attr("width", width).attr("height", height)
 
   svg.on "mousemove", ->
     p = d3.mouse(this)
