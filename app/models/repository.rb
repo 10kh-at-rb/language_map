@@ -16,7 +16,4 @@ class Repository < ActiveRecord::Base
     self.where(language: language)
   end
 
-  def self.ruby_long_lat
-    self.has_latlong.in_language("Ruby").map{|r| [r.longitude, r.latitude]}
-  end
 end
