@@ -14,18 +14,28 @@ $ ->
 
   svg = d3.select("body").append("svg").attr("width", width).attr("height", height)
 
-  svg.on "mousemove", ->
-    p = d3.mouse(this)
-    projection.rotate [λ(p[0]), φ(p[1])]
+  # svg.on "mousemove", ->
+  #   p = d3.mouse(this)
+  #   projection.rotate [λ(p[0]), φ(p[1])]
+  #   svg.selectAll("path").attr "d", path
+
+  drag = d3.behavior.drag().origin( ->
+    t = d3.event
+    x: t.x
+    y: t.y
+  ).on "drag", ->
+    x = d3.event.x
+    y = d3.event.y
+    projection.rotate [λ(x), φ(y)]
     svg.selectAll("path").attr "d", path
 
-  svg.append("circle").attr("cx", width / 2).attr("cy", height / 2).attr("r", projection.scale()).attr "class", "globe"
+  svg.append("circle").attr("cx", width / 2).attr("cy", height / 2).attr("r", projection.scale()).attr("class", "globe").call(drag)
 
   d3.json "data/map_json.json", (error, world) ->
-    svg.append("path").datum(topojson.feature(world, world.objects.land)).attr("class", "land").attr "d", path
+    svg.append("path").datum(topojson.feature(world, world.objects.land)).attr("class", "land").attr("d", path).call(drag)
     svg.append("path").datum(topojson.mesh(world, world.objects.countries, (a, b) ->
       a isnt b
-    )).attr("class", "boundary").attr "d", path
+    )).attr("class", "boundary").attr("d", path)
 
   d3.json "repositories.json", (error, data) ->
     svg.selectAll("path.datapoint").data(data).enter().append("path").datum((d) ->
