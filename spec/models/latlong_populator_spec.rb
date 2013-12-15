@@ -23,9 +23,11 @@ describe LatlongPopulator do
       Geocoder.expects(:search).with("New York").returns([])
       expect{LatlongPopulator.new.run}.not_to raise_error
     end
+
+    it "removes weird characters" do
+      repo_without_latlong.update_attribute :location, "G��teborg, Sweden"
+      Geocoder.expects(:search).with( "Gteborg, Sweden").returns([])
+      LatlongPopulator.new.run
+    end
   end
 end
-
-# def geocoder_response
-#   stub(data: { "geometry" => { "location" => { "lat" => 12.345, "lng" => 67.89 } } })
-# end
