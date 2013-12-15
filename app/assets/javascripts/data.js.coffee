@@ -45,3 +45,4 @@ $ ->
     PHP: "brown"
     Shell: "indigo"
     C: "pink"
+    "Objective-C": "aqua"
