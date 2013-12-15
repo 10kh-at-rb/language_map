@@ -15,3 +15,47 @@ body {
 .land {
   fill: DarkGoldenRod;
 }
+
+#container {
+  #map {
+    float: left;
+  }
+  #key {
+    float: right;
+  }
+}
+
+span {
+  height: 15px;
+  width: 15px;
+  float: right;
+  margin-left: 10px;
+}
+
+span#red {
+  background-color: red;
+}
+span#orange {
+  background-color: orange;
+}
+span#yellow {
+  background-color: yellow;
+}
+span#green {
+  background-color: green;
+}
+span#blue {
+  background-color: blue;
+}
+span#indigo {
+  background-color: indigo;
+}
+span#purple {
+  background-color: purple;
+}
+span#pink {
+  background-color: pink;
+}
+span#brown {
+  background-color: brown;
+}
