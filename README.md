@@ -1,9 +1,9 @@
-Using Google BigQuery GitHub dataset and d3.js to map repositories by language.
+Using Google BigQuery GitHub dataset and d3.js to plot repositories on a world map by language.
 
 The dataset can be found here:
 https://bigquery.cloud.google.com/table/githubarchive:github.timeline
 
-I haven't figured out out exactly which data to pull for the visualization, but the query I'm using for my seed data in development is as follows:
+The query I'm using for my seed data in development is as follows:
 
 ```sql
 SELECT payload_head, repository_url, repository_language, actor_attributes_location
@@ -19,4 +19,4 @@ LIMIT 1000;
 
 To seed data, run this query and export to CSV, and upload the CSV at http://localhost:3000/data.
 
-To populate latitude/longitude, run `rake latlong:populate`. I haven't figured out how the Geocoder/Google rate limiting works but you'll probably need to run the rake task a few times before all of the records with findable location names are populated.
+To populate latitude/longitude, run `rake latlong:populate`. Because of Geocoder/Google rate limiting, you'll probably need to run the rake task a few times before all of the records with findable location names are populated.
