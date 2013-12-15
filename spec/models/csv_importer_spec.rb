@@ -18,25 +18,25 @@ describe CsvImporter do
       it "sets the correct sha attribute" do
         CsvImporter.import(csv)
         urls = %w[1a2b3c4d5e 6f7g8h9i0j 5k4l3m2n1o 0p9q8r7s6t].sort
-        expect(Repository.all.map(&:sha).sort).to eq(urls)
+        expect(Repository.all.map(&:sha)).to include(*urls)
       end
 
       it "sets the correct url attribute" do
         CsvImporter.import(csv)
         urls = [0,1,2,3].map { |n| "https://github.com/user#{n}/repo#{n}" }
-        expect(Repository.all.map(&:url)).to eq(urls)
+        expect(Repository.all.map(&:url)).to include(*urls)
       end
 
       it "sets the correct language attribute when language is present" do
         CsvImporter.import(csv)
         languages = ["Ruby", "JavaScript", "C++", "Objective-C"]
-        expect(Repository.all.map(&:language)).to eq(languages)
+        expect(Repository.all.map(&:language)).to include(*languages)
       end
 
       it "sets full location regardless of presence of commas" do
         CsvImporter.import(csv)
         locations = ["Washington, DC", "San Francisco", "Horncastle, Lincolnshire, UK", "Moscow, Russia"]
-        expect(Repository.all.map(&:location)).to eq(locations)
+        expect(Repository.all.map(&:location)).to include(*locations)
       end
     end
 
