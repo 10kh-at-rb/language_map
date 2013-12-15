@@ -1,6 +1,5 @@
 class RepositoriesController < ApplicationController
   def index
-    @repositories = Repository.has_latlong
-    render json: @repositories
+    render json: Repository.has_latlong
   end
 end
