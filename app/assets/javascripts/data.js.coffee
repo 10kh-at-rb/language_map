@@ -63,3 +63,14 @@ $ ->
     Shell: "indigo"
     C: "pink"
     "Objective-C": "aqua"
+
+  $(":checkbox").change ->
+    language = @name
+    if $(this).is(':checked')
+      svg.selectAll("path.datapoint").filter((d) ->
+        d.language == language
+      ).style("display", "block")
+    else
+      svg.selectAll("path.datapoint").filter((d) ->
+        d.language == language
+      ).style("display", "none")
