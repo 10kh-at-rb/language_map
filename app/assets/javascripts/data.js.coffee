@@ -14,6 +14,7 @@ $ ->
   o0 = null
 
   drag = d3.behavior.drag().on("dragstart", ->
+    d3.event.sourceEvent.stopPropagation
     proj = projection.rotate()
     m0 = [d3.event.sourceEvent.pageX, d3.event.sourceEvent.pageY]
     o0 = [-proj[0],-proj[1]]
@@ -25,10 +26,20 @@ $ ->
       d3.selectAll("path").attr("d", path)
   )
 
-  svg.append("circle").attr("cx", width / 2).attr("cy", height / 2).attr("r", projection.scale()).attr("class", "globe").call(drag)
+  scale0 = projection.scale()
+
+  zoom = d3.behavior.zoom().scale(projection.scale()).on("zoom", ->
+    scale = d3.event.scale
+    projection.scale(scale)
+    backgroundCircle.attr('r', scale)
+    path.pointRadius(2 * scale / scale0)
+    d3.selectAll("path").attr("d", path)
+  )
+
+  backgroundCircle = svg.append("circle").attr("cx", width / 2).attr("cy", height / 2).attr("r", projection.scale()).attr("class", "globe").call(drag).call(zoom)
 
   d3.json "data/map_json.json", (error, world) ->
-    svg.append("path").datum(topojson.feature(world, world.objects.land)).attr("class", "land").attr("d", path).call(drag)
+    svg.append("path").datum(topojson.feature(world, world.objects.land)).attr("class", "land").attr("d", path).call(drag).call(zoom)
     svg.append("path").datum(topojson.mesh(world, world.objects.countries, (a, b) ->
       a isnt b
     )).attr("class", "boundary").attr("d", path)
