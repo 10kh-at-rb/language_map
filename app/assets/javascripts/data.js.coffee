@@ -6,7 +6,7 @@ $ ->
 
   path = d3.geo.path().projection(projection)
 
-  path.pointRadius(2)
+  path.pointRadius(1)
 
   svg = d3.select("#map").append("svg").attr("width", width).attr("height", height)
 
@@ -32,7 +32,7 @@ $ ->
     scale = d3.event.scale
     projection.scale(scale)
     backgroundCircle.attr('r', scale)
-    path.pointRadius(2 * scale / scale0)
+    path.pointRadius(scale / scale0)
     d3.selectAll("path").attr("d", path)
   )
 
